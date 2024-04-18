@@ -1,11 +1,17 @@
 ﻿var currentDirectory = Directory.GetCurrentDirectory();
 var storesDirectory = Path.Combine(currentDirectory, "stores");
+var salesTotalDirectory = Path.Combine(currentDirectory, "salesTotalDir");
+
+if (!Path.Exists(salesTotalDirectory))
+    Directory.CreateDirectory(salesTotalDirectory);
 
 var salesFiles = FindFiles(storesDirectory, "*.json", IsSalesFile);
 ListFiles(salesFiles);
 
 var jsonFiles = FindFiles(storesDirectory, "*", IsJson);
 ListFiles(jsonFiles);
+
+WriteFile(Path.Combine(salesTotalDirectory, "totals.txt"));
 
 return;
 
@@ -41,4 +47,9 @@ void ListFiles(IEnumerable<string> files)
         Console.WriteLine(file);
     
     Console.WriteLine("\n");
+}
+
+void WriteFile(string path, string textContent = "")
+{
+    File.WriteAllText(path, textContent);
 }
