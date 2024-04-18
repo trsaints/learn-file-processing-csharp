@@ -1,20 +1,11 @@
 ﻿var currentDirectory = Directory.GetCurrentDirectory();
+var storesDirectory = Path.Combine(currentDirectory, "stores");
 
-var salesFiles = FindFiles(currentDirectory, "*.json", IsSalesFile);
+var salesFiles = FindFiles(storesDirectory, "*.json", IsSalesFile);
+ListFiles(salesFiles);
 
-listFiles(salesFiles);
-
-var documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
-salesFiles = FindFiles(documentsFolder, "*.json", IsSalesFile);
-
-listFiles(salesFiles);
-
-var customPath = Path.Combine("/home", "trsaints", "RiderProjects", "mslearn-dotnet-files", "stores");
-
-salesFiles = FindFiles(customPath, "*.json", IsSalesFile);
-
-listFiles(salesFiles);
+var jsonFiles = FindFiles(storesDirectory, "*", IsJson);
+ListFiles(jsonFiles);
 
 return;
 
@@ -31,7 +22,14 @@ bool IsSalesFile(string file)
     return file.EndsWith("sales.json");
 }
 
-void listFiles(IEnumerable<string> files)
+bool IsJson(string file)
+{
+    var fileExtension = Path.GetExtension(file);
+    
+    return fileExtension == ".json";
+}
+
+void ListFiles(IEnumerable<string> files)
 {
     if (files.Count() == 0)
     {
@@ -41,4 +39,6 @@ void listFiles(IEnumerable<string> files)
 
     foreach (var file in files)
         Console.WriteLine(file);
+    
+    Console.WriteLine("\n");
 }
