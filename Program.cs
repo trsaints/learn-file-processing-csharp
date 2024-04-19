@@ -1,4 +1,8 @@
-﻿var currentDirectory = Directory.GetCurrentDirectory();
+﻿using System.Globalization;
+using mslearn_dotnet_files;
+using Newtonsoft.Json;
+
+var currentDirectory = Directory.GetCurrentDirectory();
 var storesDirectory = Path.Combine(currentDirectory, "stores");
 var salesTotalDirectory = Path.Combine(currentDirectory, "salesTotalDir");
 
@@ -11,7 +15,15 @@ ListFiles(salesFiles);
 var jsonFiles = FindFiles(storesDirectory, "*", IsJson);
 ListFiles(jsonFiles);
 
-WriteFile(Path.Combine(salesTotalDirectory, "totals.txt"));
+WriteFile([salesTotalDirectory, "sales.json"]);
+
+var salesJson = ReadFile(["stores", "201", "sales.json"]);
+var salesData = ReadJson(salesJson);
+var totalString = salesData.Total.ToString(CultureInfo.CurrentCulture);
+
+WriteFile([salesTotalDirectory, "totals.txt"], totalString);
+
+Console.WriteLine(salesData.Total);
 
 return;
 
@@ -37,19 +49,28 @@ bool IsJson(string file)
 
 void ListFiles(IEnumerable<string> files)
 {
-    if (files.Count() == 0)
-    {
-        Console.WriteLine("No sales files found.");
+    var enumerable = files as string[] ?? files.ToArray();
+    
+    if (enumerable.Length == 0)
         return;
-    }
 
-    foreach (var file in files)
+    foreach (var file in enumerable)
         Console.WriteLine(file);
     
     Console.WriteLine("\n");
 }
 
-void WriteFile(string path, string textContent = "")
+void WriteFile(string[] path, string textContent = "")
 {
-    File.WriteAllText(path, textContent);
+    File.WriteAllText(Path.Combine(path), textContent);
+}
+
+string ReadFile(string[] path)
+{
+    return File.ReadAllText(Path.Combine(path));
+}
+
+SalesTotal ReadJson(string path)
+{
+    return JsonConvert.DeserializeObject<SalesTotal>(path) ?? throw new InvalidOperationException();
 }
