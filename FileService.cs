@@ -15,9 +15,7 @@ public static class FileService
     {
         return file.EndsWith("sales.json");
     }
-
-
-
+    
     public static void ListFiles(IEnumerable<string> files)
     {
         var enumerable = files as string[] ?? files.ToArray();
@@ -31,9 +29,14 @@ public static class FileService
         Console.WriteLine("\n");
     }
 
-    public static void WriteFile(string[] path, string textContent = "")
+    public static void WriteTo(string[] path, string textContent = "")
     {
         File.WriteAllText(Path.Combine(path), textContent);
+    }
+
+    public static void AppendTo(string[] path, string textContent)
+    {
+        File.AppendAllText(Path.Combine(path), textContent);
     }
 
     public static string ReadFile(string[] path)
