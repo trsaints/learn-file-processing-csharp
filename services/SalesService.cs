@@ -1,4 +1,4 @@
-namespace mslearn_dotnet_files;
+namespace mslearn_dotnet_files.services;
 
 public static class SalesService
 {

@@ -1,4 +1,5 @@
-namespace mslearn_dotnet_files;
+namespace mslearn_dotnet_files.services;
+using models;
 using Newtonsoft.Json;
 
 public static class JsonService
